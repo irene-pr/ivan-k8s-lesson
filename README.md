@@ -1,0 +1,2 @@
+helm upgrade --install nginx1 nginx-chart --wait --atomic -f nginx-chart/values-staging.yaml --namespace nginx1 --create-namespace 
+helm upgrade --install nginx2 nginx-chart --wait --atomic -f nginx-chart/values.yaml --namespace nginx2 --create-namespace 
