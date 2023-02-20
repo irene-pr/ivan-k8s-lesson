@@ -66,3 +66,14 @@ kubectl port-forward pod/<pod> <port>:<port>
 ```
 helm upgrade --install keycloak keycloak-chart --namespace keycloak --create-namespace --wait --atomic
 ```
+
+## Install ArgoCD
+
+```
+helm upgrade --install argocd argocd-chart --namespace argocd --create-namespace --wait --atomic
+```
+
+get password
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}"
+```
