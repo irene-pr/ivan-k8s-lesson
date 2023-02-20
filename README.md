@@ -1,4 +1,4 @@
-Kind
+## Kind
 
 ```bash
 kind create cluster --name <name>
@@ -7,23 +7,41 @@ kind get clusters
 kind delete cluster --name <name>
 ```
 
-Helm
+## Helm
 
 ```bash
 helm create <chart, p.e. nginx-chart>
 helm list -A
 
-# the values file is values.yaml the default unless specified
+# the values file is values_1.yaml the default unless specified
 helm install <new name namespace> <chart>
 # the difference between upgrade vs upgrade --install is that the first just adds the changes relative to the previous version, whereas the second ¿restarts everything?
 helm upgrade <new name namespace> <chart>
 helm upgrade --install nginx nginx-chart
 # --wait will stack the command
 # --atomic if the command fails it reverts back to the last version that actually works
-helm upgrade --install nginx1 nginx-chart --wait --atomic -f nginx-chart/values-staging.yaml --namespace nginx1 --create-namespace
+helm upgrade --install nginx1 nginx-chart --wait --atomic -f nginx-chart/values_2.yaml --namespace nginx1 --create-namespace
 ```
 
-Kubectl
+### Ingress NGINX
+
+Docs link: https://kubernetes.github.io/ingress-nginx/
+
+```bash
+helm upgrade --install ingress-nginx YourPathToTheChart\...\ingress-nginx --set controller.service.type="NodePort" --set controller.service.nodePorts.http=30000 --namespace ingress-nginx --create-namespace --wait --atomic
+```
+
+### Helm Install NGINX1 & NGINX2
+
+```
+helm install nginx1 nginx-chart --namespace nginx1 --create-namespace --values .\nginx-chart\values_1.yaml
+```
+
+```
+helm install nginx2 nginx-chart --namespace nginx2 --create-namespace --values .\nginx-chart\values_2.yaml
+```
+
+## Kubectl
 
 ```bash
 kubectl get all
@@ -42,3 +60,4 @@ kubectl config get-contexts
 
 kubectl port-forward pod/<pod> <port>:<port>
 ```
+
