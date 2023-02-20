@@ -1,0 +1,5 @@
+container:
+  port: 8080
+service:
+  port: 80
+kindHostPort: 8080

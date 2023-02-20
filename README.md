@@ -61,3 +61,8 @@ kubectl config get-contexts
 kubectl port-forward pod/<pod> <port>:<port>
 ```
 
+## Install keycloak
+
+```
+helm upgrade --install keycloak keycloak-chart --namespace keycloak --create-namespace --wait --atomic
+```

@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:20.0.3
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.port }}
+          command:
+            - /bin/bash
+            - -c
+            - /opt/keycloak/bin/kc.sh start
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: password
+            - name: KC_HOSTNAME_URL
+              value: http://localhost:{{ .Values.kindHostPort }}
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: http://localhost:{{ .Values.kindHostPort }}
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+            - name: KC_HOSTNAME_STRICT_HTTPS
+              value: "false"
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_PROXY
+              value: "edge"
+            - name: KC_DB
+              value: mysql
+            - name: KC_DB_URL
+              value: jdbc:mysql://mysql/db
+            - name: KC_DB_USERNAME
+              value: admin
+            - name: KC_DB_PASSWORD
+              value: password
+          imagePullPolicy: IfNotPresent
