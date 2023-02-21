@@ -16,5 +16,5 @@ jobs:
           docker build . -t $container_registry:0.0.${{ github.run_number }}
       - name: Push Docker image
         run: |
-          docker login -u ${{ secrets.ANDRES_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.ANDRES_CONTAINER_REGISTRY_PASSWORD }} $container_registry
+          docker login -u ${{ secrets.ANDRES_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.ANDRES_CONTAINER_REGISTRY_PASSWORD }}
           docker push $container_registry:0.0.${{ github.run_number }}
