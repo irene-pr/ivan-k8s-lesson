@@ -1,0 +1,20 @@
+name: build-keycloak-with-theme
+on:
+  workflow_dispatch:
+jobs:
+  build-docker:
+    name: build-keycloak-docker-image
+    runs-on: ubuntu-22.04
+    env:
+      container_registry: andresalonsocodurance/zero-error
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: |
+          cd keycloak-theme
+          docker build . -t $container_registry:0.0.${{ github.run_number }}
+      - name: Push Docker image
+        run: |
+          docker login -u ${{ secrets.ANDRES_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.ANDRES_CONTAINER_REGISTRY_PASSWORD }} $container_registry
+          docker push $container_registry:0.0.${{ github.run_number }}
