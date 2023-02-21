@@ -21,10 +21,9 @@ jobs:
         run: |
           docker login -u ${{ secrets.ANDRES_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.ANDRES_CONTAINER_REGISTRY_ACCESS_TOKEN }}
           docker push $full_repo_string
-
   update-values:
     name: Update Values File
-    needs: build
+    needs: build-docker
     runs-on: ubuntu-22.04
     env:
       container_registry: andresalonsocodurance
