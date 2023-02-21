@@ -1,35 +1,29 @@
 name: build-keycloak-with-theme
 on:
   workflow_dispatch:
+env:
+  container_registry: andresalonsocodurance
+  repo: zero-error
+  tag: 0.0.${{ github.run_number }}
 jobs:
   build-docker:
     name: build-keycloak-docker-image
     runs-on: ubuntu-22.04
-    env:
-      container_registry: andresalonsocodurance
-      repo: zero-error
-      tag: 0.0.${{ github.run_number }}
-      full_repo_string: andresalonsocodurance/zero-error:0.0.${{ github.run_number }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
       - name: Build the Docker image
         run: |
           cd keycloak-theme
-          docker build . -t $full_repo_string
+          docker build . -t $container_registry/$repo:$tag
       - name: Push Docker image
         run: |
           docker login -u ${{ secrets.ANDRES_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.ANDRES_CONTAINER_REGISTRY_ACCESS_TOKEN }}
-          docker push $full_repo_string
+          docker push $container_registry/$repo:$tag
   update-values:
     name: Update Values File
     needs: build-docker
     runs-on: ubuntu-22.04
-    env:
-      container_registry: andresalonsocodurance
-      repo: zero-error
-      tag: 0.0.${{ github.run_number }}
-      full_repo_string: andresalonsocodurance/zero-error:0.0.${{ github.run_number }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -40,5 +34,5 @@ jobs:
           chmod +x yq
       - name: Update Image value
         run: |
-          yq e '.container.image = "$full_repo_string"' -i keycloak-chart/values.yaml
+          yq e '.container.image = "$container_registry/$repo:$tag"' -i keycloak-chart/values.yaml
           cat keycloak-chart/values.yaml
