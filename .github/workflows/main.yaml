@@ -35,10 +35,9 @@ jobs:
       - name: Update Image value
         run: |
           yq e '.container.image = "${{ env.container_registry }}/${{ env.repo }}:${{ env.tag }}"' -i keycloak-chart/values.yaml
-          cat keycloak-chart/values.yaml
       - name: Push values file
         run: |
-          git config user.name '${{ env.CI_COMMIT_AUTHOR }}'
+          git config user.name '${{ secrets.USERNAME }}'
           git config user.email '${{ secrets.EMAIL }}'
           git commit -am "Update the Keycloak image to $tag"
           git pull origin HEAD && git push origin HEAD
