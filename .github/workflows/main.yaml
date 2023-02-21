@@ -40,5 +40,5 @@ jobs:
           chmod +x yq
       - name: Update Image value
         run: |
-          yq e '.image = "$full_repo_string"' -i ../../keycloak-chart/values.yaml
+          yq e '.image = "$full_repo_string"' -i keycloak-chart/values.yaml
           cat values.yaml
