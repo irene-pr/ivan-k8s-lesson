@@ -34,5 +34,5 @@ jobs:
           chmod +x yq
       - name: Update Image value
         run: |
-          yq e '.container.image = $container_registry/$repo:$tag' -i keycloak-chart/values.yaml
+          yq e '.container.image = "${{ env.container_registry }}/${{ env.repo }}:${{ env.tag }}"' -i keycloak-chart/values.yaml
           cat keycloak-chart/values.yaml
