@@ -1,5 +1,6 @@
 container:
   port: 8080
+  image: andresalonsocodurance/zero-error:1.0.1
 service:
   port: 80
 kindHostPort: 8080
