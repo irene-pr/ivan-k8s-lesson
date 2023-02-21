@@ -6,15 +6,40 @@ jobs:
     name: build-keycloak-docker-image
     runs-on: ubuntu-22.04
     env:
-      container_registry: andresalonsocodurance/zero-error
+      container_registry: andresalonsocodurance
+      repo: zero-error
+      tag: 0.0.${{ github.run_number }}
+      full_repo_string: andresalonsocodurance/zero-error:0.0.${{ github.run_number }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
       - name: Build the Docker image
         run: |
           cd keycloak-theme
-          docker build . -t $container_registry:0.0.${{ github.run_number }}
+          docker build . -t $full_repo_string
       - name: Push Docker image
         run: |
           docker login -u ${{ secrets.ANDRES_CONTAINER_REGISTRY_USERNAME }} -p ${{ secrets.ANDRES_CONTAINER_REGISTRY_ACCESS_TOKEN }}
-          docker push $container_registry:0.0.${{ github.run_number }}
+          docker push $full_repo_string
+
+  update-values:
+    name: Update Values File
+    needs: build
+    runs-on: ubuntu-22.04
+    env:
+      container_registry: andresalonsocodurance
+      repo: zero-error
+      tag: 0.0.${{ github.run_number }}
+      full_repo_string: andresalonsocodurance/zero-error:0.0.${{ github.run_number }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install YQ
+        run: |
+          wget -qO ./yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          chmod +x yq
+      - name: Update Image value
+        run: |
+          yq e '.image = "$full_repo_string"' -i values.yaml
+          cat values.yaml
