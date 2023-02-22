@@ -1,6 +1,11 @@
 name: build-keycloak-with-theme
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'keycloak-theme/**'
 env:
   container_registry: andresalonsocodurance
   repo: zero-error
