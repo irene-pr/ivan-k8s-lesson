@@ -7,7 +7,7 @@ kind create cluster --config kind-config.yaml
 ```
 ### Install NGINX Ingress
 ```bash
-helm upgrade --install ingress-nginx .\ingress-nginx --set controller.service.type="NodePort" --set controller.service.nodePorts.http=30000 --namespace ingress-nginx --create-namespace --wait --atomic
+helm upgrade --install ingress-nginx ingress-nginx --set controller.service.type="NodePort" --set controller.service.nodePorts.http=30000 --namespace ingress-nginx --create-namespace --wait --atomic
 ```
 ### Install ArgoCD
 ```bash
