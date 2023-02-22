@@ -1,3 +1,34 @@
+# Install KeyCloak in K8s with ArgoCD
+
+### Create K8s cluster
+
+```bash
+kind create cluster --config kind-config.yaml
+```
+### Install NGINX Ingress
+```bash
+helm upgrade --install ingress-nginx .\ingress-nginx --set controller.service.type="NodePort" --set controller.service.nodePorts.http=30000 --namespace ingress-nginx --create-namespace --wait --atomic
+```
+### Install ArgoCD
+```bash
+helm upgrade --install argocd argocd-chart --namespace argocd --create-namespace --wait --atomic
+```
+
+### Connect to ArgoCD
+```bash
+kubectl -n argocd port-forward service/argocd-server 9090:80
+```
+
+### Get ArgoCD admin password:
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+DO NOT WRITE THE APP NAME WITH CAPS
+
+___
+
+# Helper Commands
+
 ## Kind
 
 ```bash
