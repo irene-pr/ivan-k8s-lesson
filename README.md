@@ -19,11 +19,31 @@ helm upgrade --install argocd argocd-chart --namespace argocd --create-namespace
 kubectl -n argocd port-forward service/argocd-server 9090:80
 ```
 
-### Get ArgoCD admin password:
+### Get ArgoCD admin password
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
-DO NOT WRITE THE APP NAME WITH CAPS
+DO NOT WRITE THE APP NAME WITH CAPS IN ARGO CD
+
+### Allow ArgoCD to monitor this repo
+
+```bash
+kubectl -n argocd apply -f keycloak-argocd-app/secret.yaml
+```
+### Create the KeyCloak ArgoCD application
+
+```bash
+kubectl apply -f keycloak-argocd-app/application.yaml
+```
+
+### Make a change to the KeyCloak theme
+
+- Make a simple change to the KeyCloak theme so that you are able to see the changes.
+
+- Commit and push it.
+
+- Monitor the ArgoCD UI for correct auto-sync.
+
 
 ___
 
