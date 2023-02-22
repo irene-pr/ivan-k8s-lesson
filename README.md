@@ -14,26 +14,25 @@ helm upgrade --install ingress-nginx ingress-nginx --set controller.service.type
 helm upgrade --install argocd argocd-chart --namespace argocd --create-namespace --wait --atomic
 ```
 
+### Get ArgoCD admin password (in linux environment)
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
 ### Connect to ArgoCD
 ```bash
 kubectl -n argocd port-forward service/argocd-server 9090:80
 ```
 
-### Get ArgoCD admin password
-```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
-DO NOT WRITE THE APP NAME WITH CAPS IN ARGO CD
-
 ### Allow ArgoCD to monitor this repo
 
 ```bash
-kubectl -n argocd apply -f keycloak-argocd-app/secret.yaml
+kubectl -n argocd apply -f keycloak-argocd-app/secret.yml
 ```
 ### Create the KeyCloak ArgoCD application
 
 ```bash
-kubectl apply -f keycloak-argocd-app/application.yaml
+kubectl apply -f keycloak-argocd-app/application.yml
 ```
 
 ### Make a change to the KeyCloak theme
